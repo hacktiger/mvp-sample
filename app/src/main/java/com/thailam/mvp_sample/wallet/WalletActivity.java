@@ -21,7 +21,7 @@ public class WalletActivity extends AppCompatActivity implements WalletContract.
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		// init view components test test
+		// init view components test test s sc s sc s s cc
 		initButtons();
 		initTxtView();
 		initProgressBar();
