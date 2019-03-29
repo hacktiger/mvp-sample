@@ -7,7 +7,6 @@ import java.util.List;
 public class WalletPresenter implements WalletContract.Presenter, WalletRepository.GetWalletsCallback {
 
 	private final WalletContract.View mView;
-	private List<Wallet> mList;
 	private WalletRepository mWalletRepo;
 
 
