@@ -1,15 +1,23 @@
 package com.thailam.mvp_sample.wallet;
 
+import android.content.Context;
+
 import java.util.List;
 
 public interface WalletContract {
 	interface Presenter {
-		List<WalletModel> getData();
+		void addData(Wallet wallet);
+
 		void loadData();
+
+		void initRepository();
 	}
 
 	interface View {
 		void setProgressBar();
-		void showWallets(List<WalletModel> list);
+
+		void showWallets(List<Wallet> list);
+
+		Context getContext();
 	}
 }

@@ -1,5 +1,6 @@
 package com.thailam.mvp_sample.wallet;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -12,9 +13,7 @@ import com.thailam.mvp_sample.R;
 import java.util.List;
 
 public class WalletActivity extends AppCompatActivity implements WalletContract.View {
-
-	private WalletPresenter mWalletPresenter;
-	private Button mLoadBtn;
+	private WalletContract.Presenter mWalletPresenter;
 	private ProgressBar mProgressBar;
 	private TextView mTxt1, mTxt2;
 
@@ -23,10 +22,10 @@ public class WalletActivity extends AppCompatActivity implements WalletContract.
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		// init comps
-		initPresenter();
-		initButton();
+		initButtons();
 		initTxtView();
 		initProgressBar();
+		initPresenter();
 	}
 
 	@Override
@@ -35,19 +34,31 @@ public class WalletActivity extends AppCompatActivity implements WalletContract.
 	}
 
 	@Override
-	public void showWallets(List<WalletModel> list) {
-		mTxt1.setText(list.get(0).getmName());
-		mTxt2.setText(list.get(1).getmName());
+	public void showWallets(List<Wallet> list) {
+		mTxt1.setText(list.get(1).mName);
+		mTxt2.setText(list.get(2).mName);
+	}
+
+	@Override
+	public Context getContext() {
+		return getApplicationContext();
 	}
 
 	private void initPresenter() {
-		mWalletPresenter = new WalletPresenter(this);
+		if (mWalletPresenter == null) {
+			mWalletPresenter = new WalletPresenter(this);
+			mWalletPresenter.initRepository();
+		}
 	}
 
-	private void initButton() {
-		mLoadBtn = findViewById(R.id.btn_show);
-		mLoadBtn.setOnClickListener(v -> {
-			mWalletPresenter.getData();
+	private void initButtons() {
+		Button loadBtn = findViewById(R.id.btn_show);
+		loadBtn.setOnClickListener(v -> {
+			mWalletPresenter.loadData();
+		});
+		Button addBtn = findViewById(R.id.btn_add);
+		addBtn.setOnClickListener(v -> {
+			mWalletPresenter.addData(new Wallet(27, "wallet1", 100)); // Dummy data
 		});
 	}
 
@@ -61,6 +72,4 @@ public class WalletActivity extends AppCompatActivity implements WalletContract.
 		mProgressBar.setIndeterminate(true);
 		mProgressBar.setVisibility(View.VISIBLE);
 	}
-
-
 }

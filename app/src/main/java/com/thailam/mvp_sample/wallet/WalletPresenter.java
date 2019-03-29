@@ -1,35 +1,43 @@
 package com.thailam.mvp_sample.wallet;
 
-import java.util.ArrayList;
+import com.thailam.mvp_sample.wallet.data.WalletRepository;
+
 import java.util.List;
 
-public class WalletPresenter implements WalletContract.Presenter {
+public class WalletPresenter implements WalletContract.Presenter, WalletRepository.GetWalletsCallback {
 
 	private final WalletContract.View mView;
-	private List<WalletModel> mList;
+	private List<Wallet> mList;
+	private WalletRepository mWalletRepo;
+
 
 	public WalletPresenter(WalletContract.View view) {
 		mView = view;
 	}
 
 	@Override
-	public List<WalletModel> getData() {
-		if(mList == null) {
-			mList = new ArrayList<>();
-		}
-		loadData();
-		return mList;
+	public void addData(Wallet wallet) {
+		mWalletRepo.insertWallet(wallet);
 	}
 
 	@Override
 	public void loadData() {
-		mList.add(new WalletModel(1,"wallet1",500));
-		mList.add(new WalletModel(2,"wallet2",5200));
-		processTask();
+		mWalletRepo.getAllWallets();
 	}
 
-	private void processTask() {
-		mView.showWallets(mList);
+	@Override
+	public void initRepository() {
+		if (mWalletRepo == null) {
+			mWalletRepo = new WalletRepository(mView.getContext(), this);
+		}
+	}
+
+	@Override
+	public void callback(List<Wallet> wallets) {
+		if (wallets == null) {
+			return;
+		}
 		mView.setProgressBar();
+		mView.showWallets(wallets);
 	}
 }
